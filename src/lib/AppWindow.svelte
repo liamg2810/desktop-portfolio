@@ -31,7 +31,7 @@
 
 <!-- App -->
 <div
-	class="absolute flex flex-col"
+	class="absolute flex flex-col shadow-2xl"
 	style={`transform: translate(${position.x}px, ${position.y}px); height: ${size.y}px; width: ${size.x}px`}
 >
 	<div

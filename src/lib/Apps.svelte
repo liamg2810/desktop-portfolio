@@ -2,13 +2,15 @@
 	import type { Component } from 'svelte';
 	import Window from './AppWindow.svelte';
 	import BlueApp from './BlueApp.svelte';
+	import GreenApp from './GreenApp.svelte';
 	import RedApp from './RedApp.svelte';
 
 	type App = { app: Component; id: string };
 
 	let apps: App[] = $state([
 		{ app: BlueApp, id: 'blue' },
-		{ app: RedApp, id: 'red' }
+		{ app: RedApp, id: 'red' },
+		{ app: GreenApp, id: 'green' }
 	]);
 
 	function FocusApp(ix: number) {
