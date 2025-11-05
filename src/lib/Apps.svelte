@@ -10,5 +10,5 @@
 </script>
 
 {#each apps as A}
-	<Window App={A} />
+	<Window App={A} position={{ x: Math.random() * 500, y: 50 }} />
 {/each}

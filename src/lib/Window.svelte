@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
 
-	let props: { App: Component } = $props();
-	let position: { x: number; y: number } = $state({ x: 100, y: 100 });
+	let props: { App: Component; position: { x: number; y: number } } = $props();
 	let offset: { x: number; y: number } = $state({ x: 0, y: 0 });
+	let position = $state(props.position);
 
 	let dragging = $state(false);
 </script>
@@ -24,7 +24,7 @@
 
 <!-- App -->
 <div
-	class="absolute flex h-24 w-24 resize flex-col"
+	class="absolute flex h-24 w-24 flex-col"
 	style={`transform: translate(${position.x}px, ${position.y}px)`}
 >
 	<div
