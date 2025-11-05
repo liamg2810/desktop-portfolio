@@ -1,8 +1,15 @@
 <script lang="ts">
-	import type { Component } from 'svelte';
+	import type { Component, SvelteComponent } from 'svelte';
 
-	let props: { App: Component; position: { x: number; y: number } } = $props();
+	let props: {
+		App: Component;
+		position: { x: number; y: number };
+		onFocus: (ix: number) => void;
+		ix: number;
+	} = $props();
+
 	let offset: { x: number; y: number } = $state({ x: 0, y: 0 });
+	let size: { x: number; y: number } = $state({ x: 500, y: 500 });
 	let position = $state(props.position);
 
 	let dragging = $state(false);
@@ -24,15 +31,16 @@
 
 <!-- App -->
 <div
-	class="absolute flex h-24 w-24 flex-col"
-	style={`transform: translate(${position.x}px, ${position.y}px)`}
+	class="absolute flex flex-col"
+	style={`transform: translate(${position.x}px, ${position.y}px); height: ${size.y}px; width: ${size.x}px`}
 >
 	<div
 		role="none"
-		class="h-4 w-full bg-blue-800"
+		class="h-8 w-full bg-blue-800"
 		onmousedown={(ev) => {
 			dragging = true;
 			offset = { x: position.x - ev.clientX, y: position.y - ev.clientY };
+			props.onFocus(props.ix);
 		}}
 		onmouseup={() => {
 			dragging = false;
