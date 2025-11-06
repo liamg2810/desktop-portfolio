@@ -31,12 +31,15 @@
 
 <!-- App -->
 <div
-	class="absolute flex flex-col shadow-2xl"
+	class="absolute flex flex-col overflow-hidden rounded-lg border border-stone-500 shadow-xl shadow-stone-600"
 	style={`transform: translate(${position.x}px, ${position.y}px); height: ${size.y}px; width: ${size.x}px`}
+	onclick={() => {
+		props.onFocus(props.ix)
+	}}
 >
 	<div
 		role="none"
-		class="h-8 w-full bg-blue-800"
+		class="flex h-8 w-full justify-end gap-4 bg-stone-200 px-4"
 		onmousedown={(ev) => {
 			dragging = true;
 			offset = { x: position.x - ev.clientX, y: position.y - ev.clientY };
@@ -45,7 +48,11 @@
 		onmouseup={() => {
 			dragging = false;
 		}}
-	></div>
+	>
+		<span class="my-auto h-5 w-5 rounded-full bg-yellow-300 align-middle"></span>
+		<span class="my-auto h-5 w-5 rounded-full bg-green-500 align-middle"></span>
+		<span class="my-auto h-5 w-5 rounded-full bg-red-700 align-middle"></span>
+	</div>
 
 	<props.App />
 </div>
