@@ -1,23 +1,24 @@
 <script lang="ts">
-	import type { Component, SvelteComponent } from 'svelte';
+	import type { Component } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import type { App } from './types';
 
 	let props: {
-		App: Component;
-		position: { x: number; y: number };
+		app: App;
 		onFocus: (ix: number) => void;
 		ix: number;
 	} = $props();
 
 	let offset: { x: number; y: number } = $state({ x: 0, y: 0 });
 	let size: { x: number; y: number } = $state({ x: 500, y: 500 });
-	let position = $state(props.position);
+	let position: { x: number; y: number } = $state(props.app.position);
 
 	let dragging = $state(false);
 </script>
 
 <!-- Dragging area -->
 <div
-	class="absolute z-1000 h-screen w-screen bg-transparent"
+	class="absolute inset-0 z-1000 bg-transparent"
 	style={dragging ? '' : 'pointer-events: none;'}
 	role="none"
 	onmousemove={(ev) => {
@@ -31,11 +32,17 @@
 
 <!-- App -->
 <div
-	class="absolute flex flex-col overflow-hidden rounded-lg border border-stone-500 shadow-xl shadow-stone-600"
-	style={`transform: translate(${position.x}px, ${position.y}px); height: ${size.y}px; width: ${size.x}px`}
+	role="none"
+	class="absolute flex flex-col overflow-hidden rounded-lg border border-stone-500 shadow-xl shadow-stone-600 transition-opacity"
+	style={`transform: translate(${position.x}px, ${position.y}px);
+			height: ${size.y}px; width: ${size.x}px;
+			opacity: ${props.app.minimized ? '0; pointer-events: none' : '1'};
+			`}
 	onclick={() => {
-		props.onFocus(props.ix)
+		props.onFocus(props.ix);
 	}}
+	in:fade
+	out:fade
 >
 	<div
 		role="none"
@@ -48,11 +55,19 @@
 		onmouseup={() => {
 			dragging = false;
 		}}
-	>
-		<span class="my-auto h-5 w-5 rounded-full bg-yellow-300 align-middle"></span>
+	></div>
+
+	<div class="absolute right-0 z-10 mt-1 mr-4 flex gap-4">
+		<button
+			onclick={() => {
+				props.app.minimized = !props.app.minimized;
+				console.log('click');
+			}}
+			aria-label="minimize"
+			class="my-auto h-5 w-5 rounded-full bg-yellow-300 align-middle hover:cursor-pointer"
+		></button>
 		<span class="my-auto h-5 w-5 rounded-full bg-green-500 align-middle"></span>
 		<span class="my-auto h-5 w-5 rounded-full bg-red-700 align-middle"></span>
 	</div>
-
-	<props.App />
+	<props.app.app />
 </div>

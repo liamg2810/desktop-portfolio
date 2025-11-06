@@ -1,24 +1,28 @@
 <script lang="ts">
-	import type { Component } from 'svelte';
-	import Window from './AppWindow.svelte';
+	import AppWindow from './AppWindow.svelte';
 	import BlueApp from './BlueApp.svelte';
 	import GreenApp from './GreenApp.svelte';
 	import RedApp from './RedApp.svelte';
-
-	type App = { app: Component; id: string };
+	import TaskBar from './TaskBar.svelte';
+	import { type App } from './types';
 
 	let apps: App[] = $state([
-		{ app: BlueApp, id: 'blue' },
-		{ app: RedApp, id: 'red' },
-		{ app: GreenApp, id: 'green' }
+		{ app: BlueApp, id: 'blue', minimized: false, position: { x: 250, y: 250 } },
+		{ app: RedApp, id: 'red', minimized: true, position: { x: 250, y: 300 } },
+		{ app: GreenApp, id: 'green', minimized: false, position: { x: 250, y: 350 } }
 	]);
 
+	let ordererdApps: App[] = $state(apps);
+
 	function FocusApp(ix: number) {
-		apps = [...apps.slice(0, ix), ...apps.slice(ix + 1), apps[ix]];
-		apps = apps;
+		const i = ordererdApps.findIndex((a) => a.id === apps[ix].id);
+		ordererdApps = [...ordererdApps.slice(0, i), ...ordererdApps.slice(i + 1), ordererdApps[i]];
 	}
 </script>
 
-{#each apps as A, ix (A.id)}
-	<Window {ix} onFocus={FocusApp} App={A.app} position={{ x: Math.random() * 500, y: 50 }} />
+{#each ordererdApps as A (A.id)}
+	{@const ix = apps.findIndex((a) => a.id === A.id)}
+	<AppWindow {ix} onFocus={FocusApp} app={apps[ix]} />
 {/each}
+
+<TaskBar {apps} {FocusApp} />
