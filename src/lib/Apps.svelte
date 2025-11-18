@@ -20,9 +20,9 @@
 	}
 </script>
 
-{#each ordererdApps as A (A.id)}
+{#each ordererdApps as A, oix (A.id)}
 	{@const ix = apps.findIndex((a) => a.id === A.id)}
-	<AppWindow {ix} onFocus={FocusApp} app={apps[ix]} />
+	<AppWindow {ix} onFocus={FocusApp} focusedApp={oix === ordererdApps.length - 1} app={apps[ix]} />
 {/each}
 
 <TaskBar {apps} {FocusApp} />

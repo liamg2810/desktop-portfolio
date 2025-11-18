@@ -7,6 +7,7 @@
 		app: App;
 		onFocus: (ix: number) => void;
 		ix: number;
+		focusedApp: boolean;
 	} = $props();
 
 	let offset: { x: number; y: number } = $state({ x: 0, y: 0 });
@@ -33,7 +34,7 @@
 <!-- App -->
 <div
 	role="none"
-	class="absolute flex flex-col overflow-hidden rounded-lg border border-stone-500 shadow-xl shadow-stone-600 transition-opacity"
+	class={`absolute flex flex-col overflow-hidden rounded-lg border border-stone-500 ${props.focusedApp ? 'shadow-md shadow-stone-600' : ''} transition-opacity`}
 	style={`transform: translate(${position.x}px, ${position.y}px);
 			height: ${size.y}px; width: ${size.x}px;
 			opacity: ${props.app.minimized ? '0; pointer-events: none' : '1'};
